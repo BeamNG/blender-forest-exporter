@@ -23,10 +23,9 @@ def export_forest(file, object_name, data_source):
     object_euler.rotate_axis('Z', math.radians(180))
     object_quaternion = object_euler.to_quaternion()
 
-    # write to file
     items.append('["' + object_name + '",' + str(ob.location[0]) + ',' + str(ob.location[1]) + ',' + str(ob.location[2])  + ',' + str(object_quaternion[2]) + ',' + str(object_quaternion[1] * -1) + ',' + str(object_quaternion[0]) + "," + str(object_quaternion[3]) + "," + str(uniform_scale) + "]")
 
-  # go before last comma to prevent parser from dying
+  # write to file
   file.write('{"header":{"format":"JSON Forest Data v3","format description":"datablockName, posX, posY, posZ, rotX, rotY, rotZ, rotW, scale","version":3},"data":[' + "\n")
   file.write(",\n".join(items))
   file.write("\n]}\n")
