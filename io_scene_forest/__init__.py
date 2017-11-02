@@ -34,50 +34,50 @@ from bpy_extras.io_utils import (
         )
 
 class ExportForest(bpy.types.Operator, ExportHelper):
-    """Export to FOREST file format (.FOREST)"""
+    """Export to FOREST file format (.FOREST.JSON)"""
     bl_idname = "export_scene.forest"
-    bl_label = 'Export Forest'
+    bl_label = 'Export Forest v3'
 
-    filename_ext = ".forest"
+    filename_ext = ".forest.json"
     filter_glob = StringProperty(
-            default="*.forest",
+            default="*.forest.json",
             options={'HIDDEN'},
             )
 
     forest_item = StringProperty(
         name="Mesh name",
-        description="This will be the exported mesh in the *.forest file",
+        description="This will be the exported mesh in the *.forest.json file",
         default="",
         )
-        
+
     selection_only = BoolProperty(
         name="Selection Only",
         description="Export only selected elements",
         default=False,
         )
-        
+
     def draw(self, context):
         layout = self.layout
         sub = layout.row()
         sub.prop(self, "forest_item")
         sub = layout.row()
         sub.prop(self, "selection_only")
-        
+
     def execute(self, context):
         from . import export_forest
-        
+
         keywords = self.as_keywords(ignore=("axis_forward",
                                             "axis_up",
                                             "filter_glob",
                                             "check_existing",
                                             ))
-                                    
+
         return export_forest.save(self, context, **keywords)
 
 
 # Add to a menu
 def menu_func_export(self, context):
-    self.layout.operator(ExportForest.bl_idname, text="BeamNG Forest (*.forest)")
+    self.layout.operator(ExportForest.bl_idname, text="BeamNG Forest (*.forest.json)")
 
 
 def register():
