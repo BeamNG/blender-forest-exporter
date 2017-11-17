@@ -4,13 +4,14 @@
 # https://creativecommons.org/licenses/by-nc-sa/3.0/
 #
 # Copyright (C) Dummiesman, 2016
+# Copyright BeamNG GmbH 2017
 #
 # ##### END LICENSE BLOCK #####
 
 bl_info = {
-    "name": "BeamNG *.forest Exporter",
+    "name": "BeamNG *.forest4.json Exporter",
     "author": "Dummiesman",
-    "version": (0, 0, 1),
+    "version": (0, 0, 2),
     "blender": (2, 77, 0),
     "location": "File > Export",
     "description": "Export forest files",
@@ -34,19 +35,19 @@ from bpy_extras.io_utils import (
         )
 
 class ExportForest(bpy.types.Operator, ExportHelper):
-    """Export to FOREST file format (.FOREST.JSON)"""
+    """Export to FOREST file format (.FOREST4.JSON)"""
     bl_idname = "export_scene.forest"
-    bl_label = 'Export Forest v3'
+    bl_label = 'Export Forest v4'
 
-    filename_ext = ".forest.json"
+    filename_ext = ".forest4.json"
     filter_glob = StringProperty(
-            default="*.forest.json",
+            default="*.forest4.json",
             options={'HIDDEN'},
             )
 
     forest_item = StringProperty(
         name="Mesh name",
-        description="This will be the exported mesh in the *.forest.json file",
+        description="This will be the exported mesh in the *.forest4.json file",
         default="",
         )
 
@@ -77,7 +78,7 @@ class ExportForest(bpy.types.Operator, ExportHelper):
 
 # Add to a menu
 def menu_func_export(self, context):
-    self.layout.operator(ExportForest.bl_idname, text="BeamNG Forest (*.forest.json)")
+    self.layout.operator(ExportForest.bl_idname, text="BeamNG Forest (*.forest4.json)")
 
 
 def register():
