@@ -1,10 +1,7 @@
 # ##### BEGIN LICENSE BLOCK #####
 #
-# This program is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 3.0
-# https://creativecommons.org/licenses/by-nc-sa/3.0/
-#
-# Copyright (C) Dummiesman, 2016
-# Copyright BeamNG GmbH 2017
+# This program is licensed under The MIT License:
+# see LICENSE for the full license text
 #
 # ##### END LICENSE BLOCK #####
 
