@@ -8,7 +8,7 @@
 bl_info = {
     "name": "BeamNG forest item (*.forest4.json)",
     "author": "BeamNG / dmn",
-    "version": (0, 1, 0),
+    "version": (0, 1, 1),
     "blender": (2, 80, 0),
     "location": "File > Import-Export",
     "description": "Import-Export forest files",
