@@ -31,8 +31,14 @@ from bpy_extras.io_utils import (
         ExportHelper,
         )
 
-from . import import_forest
-from . import export_forest
+#this is needed to force refresh of changed file
+if "bpy" in locals() and "import_forest" in locals():
+    import importlib
+    importlib.reload(import_forest)
+    importlib.reload(export_forest)
+else:
+    from . import import_forest
+    from . import export_forest
 
 
 class ExportForest(bpy.types.Operator, ExportHelper):
@@ -85,8 +91,20 @@ class ImportForest(bpy.types.Operator, ImportHelper):
             options={'HIDDEN'},
             )
 
+    object_type: EnumProperty(
+        name="Item type",
+        description="This will create a Blender object that represent each forest item",
+        items=[
+            ('EMPTY', "Empty", "", -1),
+            ('MESH', "Mesh", "", 1),
+        ],
+        default='MESH',
+        )
+
     def draw(self, context):
         layout = self.layout
+        sub = layout.row()
+        sub.prop(self, "object_type")
 
     def execute(self, context):
 
@@ -98,16 +116,38 @@ class ImportForest(bpy.types.Operator, ImportHelper):
 
         return import_forest.load(self, context, **keywords)
 
+class SCENE_OT_instance(bpy.types.Operator):
+    """Apply instancing from last selected to all objects"""
+    bl_idname = "scene.all_instance"
+    bl_label = 'Apply instancing to all selected objects (BNG forest)'
+    bl_options = {'UNDO', 'REGISTER'}
+
+    def execute(self, context):
+        if len(context.selected_objects) < 2:
+            self.report({'ERROR'},"You need to select at least 2 objects")
+            return {"CANCELLED"}
+
+        for o in context.selected_objects:
+            if o is not context.active_object and isinstance(o,bpy.types.Object):
+                o.instance_type = context.active_object.instance_type
+                if context.active_object.instance_faces_scale != None:
+                    o.instance_faces_scale = context.active_object.instance_faces_scale
+                if context.active_object.instance_collection != None:
+                    o.instance_collection = context.active_object.instance_collection
+
+        return {'FINISHED'}
+
 addon_classes = [ExportForest,
-                ImportForest
+                ImportForest,
+                SCENE_OT_instance
                 ]
 
 # Add to a menu
 def menu_func_export(self, context):
-    self.layout.operator(ExportForest.bl_idname, text="BeamNG Forest (*.forest4.json)")
+    self.layout.operator(ExportForest.bl_idname, text="BeamNG Forest item (*.forest4.json)")
 
 def menu_func_import(self, context):
-    self.layout.operator(ImportForest.bl_idname, text="BeamNG Forest (*.forest4.json)")
+    self.layout.operator(ImportForest.bl_idname, text="BeamNG Forest item (*.forest4.json)")
 
 def register():
     for c in addon_classes:

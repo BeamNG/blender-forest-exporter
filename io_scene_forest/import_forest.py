@@ -11,7 +11,7 @@ import mathutils
 import os
 import json
 
-def load(operator, context, filepath):
+def load(operator, context, filepath, object_type):
     filename = os.path.basename(filepath)
     forest_item_name = filename.replace(".forest4.json","")
     if forest_item_name in bpy.data.collections:
@@ -39,6 +39,8 @@ def load(operator, context, filepath):
                                         (rotm[3],rotm[4],rotm[5]),
                                         (rotm[6],rotm[7],rotm[8])))
                 eul = mat.to_euler()
+                eul.z = -eul.z #because yes
+                eul.rotate_axis('Z', math.radians(180))
             elif "quat" in j:
                 q = j["quat"]
                 eul = mathutils.Quaternion((q[0], q[1], q[2], q[3])).to_euler()
@@ -51,7 +53,12 @@ def load(operator, context, filepath):
             if "scale" in j:
                 scale = j["scale"]
 
-            bpy.ops.object.empty_add(type='ARROWS',
+            # bpy.ops.object.empty_add(type='ARROWS',
+            #     radius=scale,
+            #     align='WORLD',
+            #     location=(j["pos"][0], j["pos"][1], j["pos"][2]),
+            #     rotation=(eul.x, eul.y, eul.z))
+            bpy.ops.object.add(type=object_type, enter_editmode=False,
                 radius=scale,
                 align='WORLD',
                 location=(j["pos"][0], j["pos"][1], j["pos"][2]),
