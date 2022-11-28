@@ -5,7 +5,8 @@
 #
 # ##### END LICENSE BLOCK #####
 
-import os, time, math
+import os, math
+import datetime
 import bpy , mathutils
 
 ######################################################
@@ -37,7 +38,8 @@ def export_forest(file, object_name, data_source):
 
       loc = ob.location
 
-    items.append('{"type":"' + object_name + '","pos":[' + str(loc[0]) + ',' + str(loc[1]) + ',' + str(loc[2])  + '],"quat":[' + str(object_quaternion[2]) + ',' + str(object_quaternion[1] * -1) + ',' + str(object_quaternion[0]) + "," + str(object_quaternion[3]) + '],"scale":' + str(uniform_scale) + "}")
+    items.append('{"type":"' + object_name + '","pos":[' + str(loc[0]) + ',' + str(loc[1]) + ',' + str(loc[2])  + '],"quat":[' +
+    str(object_quaternion[2]) + ',' + str(object_quaternion[1] * -1) + ',' + str(object_quaternion[0]) + "," + str(object_quaternion[3]) + '],"scale":' + str(uniform_scale) + "}")
 
   # write to file
   file.write("\n".join(items))
@@ -53,7 +55,7 @@ def save_forest(filepath,
 
   print("exporting forest: %r..." % (filepath))
 
-  time1 = time.clock()
+  time1 = datetime.datetime.now()
 
   # get data source
   data_source = bpy.data.objects
@@ -66,7 +68,7 @@ def save_forest(filepath,
   file.close()
 
   # forest export complete
-  print(" done in %.4f sec." % (time.clock() - time1))
+  print(" done in %.4f sec." % ((datetime.datetime.now() - time1).total_seconds()))
 
 
 def save(operator,
